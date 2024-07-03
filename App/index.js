@@ -5,21 +5,32 @@ import React, { useState } from 'react';
 import { SafeAreaView, StyleSheet, Text, Button, View } from 'react-native';
 
 const WORDS = ["Apple", "Ball", "Cat"];
+const getLetters = (word) => word.split('');
 
 export default function App() {
-    const [currentIndex, setCurrentIndex] = useState(0);
+    const [currentWordIndex, setCurrentWordIndex] = useState(0);
+    const [currentLetterIndex, setCurrentLetterIndex] = useState(0);
+
+    const currentWord = WORDS[currentWordIndex];
+    const letters = getLetters(currentWord);
 
     const handleNext = () => {
-        if (currentIndex < WORDS.length - 1) {
-            setCurrentIndex(currentIndex + 1);
+        if (currentLetterIndex < letters.length - 1) {
+            setCurrentLetterIndex(currentLetterIndex + 1);
         } else {
-            setCurrentIndex(0); // Loop back to the first word
+            if (currentWordIndex < WORDS.length - 1) {
+                setCurrentWordIndex(currentWordIndex + 1);
+                setCurrentLetterIndex(0);
+            } else {
+                setCurrentWordIndex(0); // Loop back to the first word
+                setCurrentLetterIndex(0);
+            }
         }
     };
 
     return (
         <SafeAreaView style={styles.container}>
-            <Text style={styles.word}>{WORDS[currentIndex]}</Text>
+            <Text style={styles.letter}>{letters[currentLetterIndex]}</Text>
             <View style={styles.buttonContainer}>
                 <Button title="Next" onPress={handleNext} />
             </View>
@@ -36,8 +47,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: '#E0F7FA',
     },
-    word: {
-        fontSize: 60,
+    letter: {
+        fontSize: 100,
         fontWeight: 'bold',
         marginBottom: 40,
     },
